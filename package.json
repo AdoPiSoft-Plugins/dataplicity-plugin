@@ -1,0 +1,21 @@
+{
+  "name": "dataplicity-plugin",
+  "version": "1.0.0",
+  "description": "You can monitor and access the terminal of your machine remotely",
+  "main": "index.js",
+  "repository": "git@github.com:AdoPiSoft-Plugins/dataplicity-plugin.git",
+  "author": "Jonel Lenteria <jlenteria98@gmail.com>",
+  "license": "ISC",
+  "metadata": {
+    "admin":{
+      "navigation": [
+        {
+          "parentstate": "plugins",
+          "icon":"fa fa-laptop",
+          "text": "Dataplicity Plugin",
+          "href": "plugins.dataplicity"
+        }
+      ]
+    }
+  }
+}
