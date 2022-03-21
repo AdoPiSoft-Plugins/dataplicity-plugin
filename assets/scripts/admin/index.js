@@ -1,11 +1,10 @@
 (function () {
   angular.module('Plugins').config(function ($stateProvider) {
     $stateProvider.state('plugins.dataplicity', {
-      templateUrl: '/public/plugins/dataplicity-plugin/views/admin/admin.html',
+      templateUrl: '/plugins/dataplicity-plugin/views/admin/admin.html',
       controller: 'DataplicityCtrl',
-      url: "/dataplicity-plugin",
-      title: "Dataplicity Plugin"
+      url: '/dataplicity-plugin',
+      title: 'Dataplicity Plugin'
     })
   })
-
 })()

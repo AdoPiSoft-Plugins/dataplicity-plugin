@@ -5,16 +5,20 @@
         <form name="dataplicityForm">
           <div>
             <label class="checkbox-inline custom-checkbox nowrap control-label">
-              <input type="checkbox" name="enable_dataplicity" ng-model="config.enable_dataplicity">
+              <input ng-change="updateSettings(config.enable_dataplicity)" type="checkbox" name="enable_dataplicity"
+                ng-model="config.enable_dataplicity">
               Enable Dataplicity
             </label>
-            <span class="help-block">Allows you to access the shell of your machine and monitor your machine's admin.</span>
+            <span class="help-block">Allows you to access the shell of your machine and monitor your machine's
+              admin.</span>
           </div>
           <hr>
           <div ng-show="config.enable_dataplicity">
             <div>
               <div ng-show="old_config.email">
-                <span>Click <a href="{{config.device_url.replace('apps.', '')}}" target="_blank">here</a> and login using this email <span class="text-primary">{{old_config.email}}</span> to view and monitor your machine online.</span>
+                <span>Click <a href="{{config.device_url.replace('apps.', '')}}" target="_blank">here</a> and login
+                  using this email <span class="text-primary">{{old_config.email}}</span> to view and monitor your
+                  machine online.</span>
                 <hr>
                 <div ng-hide="show_account">
                   <a ng-click="show_account=true">Show Account</a>
@@ -34,21 +38,26 @@
                   <div class="padd-bottom">
                     <span>No account yet? <a ng-click="is_register = true">Register</a></span>
                   </div>
-                  <button type="button" class="btn btn-primary" ng-disabled="dataplicityForm.password.$invalid || dataplicityForm.email.$invalid || dataplicityForm.email.$pristine || dataplicityForm.password.$pristine" ng-click="addDevice(config)" ladda="loading">{{loading ? 'Installing..' : 'Install'}}</button>  
+                  <button type="button" class="btn btn-primary"
+                    ng-disabled="dataplicityForm.password.$invalid || dataplicityForm.email.$invalid || dataplicityForm.email.$pristine || dataplicityForm.password.$pristine"
+                    ng-click="addDevice(config)" ladda="loading">{{loading ? 'Installing..' : 'Install'}}</button>
                 </div>
 
                 <div ng-show="is_register">
                   <div class="form-group" ng-class="{'has-error':      
                     dataplicityForm.signup_email.$invalid}">
                     <label class="control-label">Email: </label>
-                    <input type="email" name="signup_email" class="form-control" ng-model="config.signup_email" required>
+                    <input type="email" name="signup_email" class="form-control" ng-model="config.signup_email"
+                      required>
                   </div>
                   <div class="padd-bottom">
                     <span>Already have an account? <a ng-click="is_register = false">Back</a></span>
-                  </div>                
-                  <button type="button" ng-click="register(config.signup_email)" class="btn btn-primary" ng-disabled="dataplicityForm.signup_email.$invalid ||  dataplicityForm.signup_email.$pristine" ladda="loading">{{loading ? 'Registering..' : 'Register'}}</button>  
+                  </div>
+                  <button type="button" ng-click="register(config.signup_email)" class="btn btn-primary"
+                    ng-disabled="dataplicityForm.signup_email.$invalid ||  dataplicityForm.signup_email.$pristine"
+                    ladda="loading">{{loading ? 'Registering..' : 'Register'}}</button>
                 </div>
-                
+
               </div>
             </div>
           </div>
@@ -64,10 +73,10 @@
       <h4>Video tutorial on how to use Dataplicity to access your machine's shell and admin.</h4>
       <p>If you have no account yet, you can register dataplicity here, see above.</p>
       <p>After verifying your account and adding your device, follow the video for more details.</p>
-       <video style="width:100%;height:auto;" controls tabindex="1" id="demo-video">
-      <source src="/public/plugins/dataplicity-plugin/demo.mp4" type="video/mp4">
-      Your browser does not support the video tag.
-    </video>
+      <video style="width:100%;height:auto;" controls tabindex="1" id="demo-video">
+        <source src="/plugins/dataplicity-plugin/assets/demo.mp4" type="video/mp4">
+        Your browser does not support the video tag.
+      </video>
 
     </div>
   </div>

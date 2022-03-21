@@ -1,4 +1,7 @@
-const https = require('@adopisoft/app/libs/http.js')
+const core = require('../core')
+const {plugin_config, https} = core
+
+
 const config = require('./config.js')
 const { exec } = require('child_process')
 
@@ -26,7 +29,8 @@ exports.addDevice = async (params) => {
 
   params.token = token
   params.device_url = device_url
-  await config.save(params)
+
+  await plugin_config.updatePlugin(config.id, params)
 
   return {success: true}
 }
@@ -38,8 +42,18 @@ exports.register = async (email) => {
   })
 }
 
+exports.resetConfig = {
+  enable_dataplicity: false,
+  password: null,
+  token: null,
+  device_url: null,
+  email: null
+}
+
 exports.getConfig = async () => {
-  let cfg = await config.read()
+  console.log(https)
+  const {plugins} = await plugin_config.read()
+  let cfg = plugins.find(p => p.id === config.id)
 
   if (!cfg.token) {
     return cfg
@@ -48,8 +62,9 @@ exports.getConfig = async () => {
   const d = devices.filter(device => device.url === cfg.device_url)
 
   if (d.length === 0 || devices.length === 0) {
-    await config.save({enable_dataplicity: false})
-    cfg = await config.read()
+    await plugin_config.updatePlugin(config.id, exports.resetConfig)
+    const p = await plugin_config.read()
+    cfg = p.plugins.find(p => p.id === config.id)
   }
 
   return cfg
@@ -59,7 +74,7 @@ exports.installDataplicity = async (token) => {
   let {install_command} = await https.get({
     url: BASE_URL + '/profile/',
     headers: {
-      'Authorization': 'Token ' + token
+      Authorization: 'Token ' + token
     }
   })
 
@@ -81,13 +96,14 @@ exports.deleteDataPlicity = async () => {
       proc.stderr.pipe(process.stderr)
     }
   })
+  await plugin_config.updatePlugin(config.id, exports.resetConfig)
 }
 
 exports.getDevice = async (token) => {
   let devices = await https.get({
     url: BASE_URL + '/devices/',
     headers: {
-      'Authorization': 'Token ' + token
+      Authorization: 'Token ' + token
     }
   })
   return devices
