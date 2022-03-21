@@ -51,7 +51,6 @@ exports.resetConfig = {
 }
 
 exports.getConfig = async () => {
-  console.log(https)
   const {plugins} = await plugin_config.read()
   let cfg = plugins.find(p => p.id === config.id)
 
