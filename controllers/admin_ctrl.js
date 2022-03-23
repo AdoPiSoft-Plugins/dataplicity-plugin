@@ -1,5 +1,8 @@
 const services = require('../services.js')
 const config = require('../config.js')
+const core = require('../../core')
+
+const {plugin_config} = core
 
 exports.addDevice = async (req, res, next) => {
   try {
@@ -27,8 +30,8 @@ exports.register = async (req, res, next) => {
 
 exports.get = async (req, res, next) => {
   try {
-    const config = await services.getConfig()
-    res.send(config)
+    const cfg = await services.getConfig()
+    res.send(cfg)
   } catch (e) {
     console.log(e)
     next(e)
@@ -41,8 +44,9 @@ exports.saveConfig = async (req, res, next) => {
 
     if (!enable_dataplicity) {
       await services.deleteDataPlicity()
+    } else {
+      await plugin_config.updatePlugin(config.id, {enable_dataplicity})
     }
-    await config.save({enable_dataplicity})
 
     res.json({success: true})
   } catch (e) {
