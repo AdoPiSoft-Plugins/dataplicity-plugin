@@ -11,6 +11,6 @@ module.exports = {
 
   async uninstall () {
     //delete dataplicity when uninstall this plugin
-    await services.deleteDataPlicity()
+    await services.deleteDataPlicity(true)
   }
 }

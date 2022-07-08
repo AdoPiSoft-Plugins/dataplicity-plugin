@@ -85,7 +85,7 @@ exports.installDataplicity = async (token) => {
     proc.stderr.pipe(process.stderr)
   })
 }
-exports.deleteDataPlicity = async () => {
+exports.deleteDataPlicity = async (is_uninstalled) => {
   const cmds = ['sudo rm -rf /opt/dataplicity', 'sudo apt purge -y supervisor', 'sudo rm -rf /etc/supervisor']
 
   await new Promise((resolve, reject) => {
@@ -95,7 +95,8 @@ exports.deleteDataPlicity = async () => {
       proc.stderr.pipe(process.stderr)
     }
   })
-  await plugin_config.updatePlugin(config.id, exports.resetConfig)
+  if(!is_uninstalled)
+    await plugin_config.updatePlugin(config.id, exports.resetConfig)
 }
 
 exports.getDevice = async (token) => {
