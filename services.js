@@ -78,11 +78,13 @@ exports.installDataplicity = async (token) => {
   })
 
   if (!install_command) return
-
+  const cmds = [install_command, 'sudo apt install python3-distutils']
   await new Promise((resolve, reject) => {
-    const proc = exec(install_command, err => (err ? reject(err) : resolve()))
-    proc.stdout.pipe(process.stdout)
-    proc.stderr.pipe(process.stderr)
+    for (const c in cmds) {
+      const proc = exec(cmds[c], err => (err ? reject(err) : resolve()))
+      proc.stdout.pipe(process.stdout)
+      proc.stderr.pipe(process.stderr)
+    }
   })
 }
 exports.deleteDataPlicity = async (is_uninstalled) => {
