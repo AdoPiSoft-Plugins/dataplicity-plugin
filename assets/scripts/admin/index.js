@@ -4,7 +4,13 @@
       templateUrl: '/plugins/dataplicity-plugin/views/admin/admin.html',
       controller: 'DataplicityCtrl',
       url: '/dataplicity-plugin',
-      title: 'Dataplicity Plugin'
+      title: 'Dataplicity Plugin',
+      sidebarMeta: {
+        order: 15,
+        icon: "fa fa-laptop",
+        text: "Dataplicity Plugin",
+        href: "plugins.dataplicity"
+      }
     })
   })
 })()
