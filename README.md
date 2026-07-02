@@ -4,3 +4,9 @@
 
 ##  v1.0.1
 * Fix bug in uninstall
+
+## v2.0.0
+* Replaced email/password login and register forms with simplified setup interface
+* Updated demo video tutorial
+* Config auto-resets when Dataplicity is not installed on the device
+* Fixed Bugs

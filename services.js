@@ -13,22 +13,22 @@ exports.addDevice = async (params) => {
     json: {email: params.email, password: params.password}
   })
 
-  let device_url = null
+  let deviceSerial = null
   if (!token) return
   try {
     await exports.installDataplicity(token)
 
     const devices = await exports.getDevice(token)
     if (devices.length > 0) {
-      device_url = devices[devices.length - 1].url
+      deviceSerial = devices[devices.length - 1].serial
     }
   } catch (e) {
     console.log('Error: ', e)
-    return {error: 'Installation failed, Try again.'}
+    return {error: 'Installation failed, try again.'}
   }
 
   params.token = token
-  params.device_url = device_url
+  params.device_serial = deviceSerial
 
   await plugin_config.updatePlugin(config.id, params)
 
@@ -46,7 +46,7 @@ exports.resetConfig = {
   enable_dataplicity: false,
   password: null,
   token: null,
-  device_url: null,
+  device_serial: null,
   email: null
 }
 
@@ -58,12 +58,11 @@ exports.getConfig = async () => {
     return cfg
   }
   const devices = await exports.getDevice(cfg.token)
-  const d = devices.filter(device => device.url === cfg.device_url)
+  const d = devices.filter(device => device.serial === cfg.device_serial)
 
   if (d.length === 0 || devices.length === 0) {
-    await plugin_config.updatePlugin(config.id, exports.resetConfig)
-    const p = await plugin_config.read()
-    cfg = p.plugins.find(p => p.id === config.id)
+    cfg = exports.resetConfig
+    exports.deleteDataPlicity()
   }
 
   return cfg
@@ -78,14 +77,23 @@ exports.installDataplicity = async (token) => {
   })
 
   if (!install_command) return
-  const cmds = [install_command, 'sudo apt install python3-distutils']
-  await new Promise((resolve, reject) => {
-    for (const c in cmds) {
-      const proc = exec(cmds[c], err => (err ? reject(err) : resolve()))
+  const cmds = [install_command, 'sudo apt install -y python3-setuptools']
+  
+  async function runCommand(cmd) {
+    return new Promise(resolve => {
+      const proc = exec(cmd, err => {
+        if (err) {
+          console.warn(`Command failed (continuing): ${cmd}\n${err.message}`)
+        }
+        resolve() // always resolve, never reject, so we continue regardless
+      })
       proc.stdout.pipe(process.stdout)
       proc.stderr.pipe(process.stderr)
-    }
-  })
+    })
+  }
+  for (const cmd of cmds) {
+    await runCommand(cmd)
+  }
 }
 exports.deleteDataPlicity = async (is_uninstalled) => {
   const cmds = ['sudo rm -rf /opt/dataplicity', 'sudo apt purge -y supervisor', 'sudo rm -rf /etc/supervisor']
@@ -102,11 +110,11 @@ exports.deleteDataPlicity = async (is_uninstalled) => {
 }
 
 exports.getDevice = async (token) => {
-  let devices = await https.get({
+  let data = await https.get({
     url: BASE_URL + '/devices/',
     headers: {
       Authorization: 'Token ' + token
     }
   })
-  return devices
+  return (data || { devices: [] }).devices
 }
