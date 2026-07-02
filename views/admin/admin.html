@@ -2,7 +2,10 @@
   <div class="col-md-12">
     <div ba-panel ba-panel-title="Dataplicity">
       <div class="col-md-12">
-        <form name="dataplicityForm">
+        <div ng-if="loading_config" class="text-center padd-bottom">
+          <i class="fa fa-spinner fa-spin"></i> Loading...
+        </div>
+        <form name="dataplicityForm" ng-hide="loading_config">
           <div>
             <label class="checkbox-inline custom-checkbox nowrap control-label">
               <input ng-change="updateSettings(config.enable_dataplicity)" type="checkbox" name="enable_dataplicity"
@@ -18,7 +21,7 @@
                 using this email <span class="text-primary">{{old_config.email}}</span> to view and monitor your
                 machine online.</span>
               <hr>
-              <a ng-click="show_account=!show_account" ng-hide="show_account">Show Account</a>
+              <a ng-click="$parent.show_account=!$parent.show_account" ng-hide="show_account">Show Account</a>
             </div>
             <div ng-if="!old_config.email || show_account">
               <div class="form-group" ng-class="{'has-error': dataplicityForm.email.$invalid}">

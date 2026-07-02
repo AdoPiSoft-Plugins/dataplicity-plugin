@@ -4,10 +4,14 @@ angular.module('Plugins')
     $scope.config = {}
 
     $scope.load = () => {
+      $scope.loading_config = true
       $http.get('/api/config').then(res => {
         $scope.config = res.data
         $scope.old_config = angular.copy(res.data)
       }).catch(CatchHttpError)
+        .finally(() => {
+          $scope.loading_config = false
+        })
     }
 
     $scope.addDevice = (data) => {
